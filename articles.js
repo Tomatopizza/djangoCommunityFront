@@ -12,6 +12,7 @@ window.onload = async () => {
         // 가져온 게시글을 표시
         articles.forEach((article) => {
             const articleDiv = document.createElement("div");
+            articleDiv.classList.add("article"); // 클래스명 추가
             const parser = new DOMParser();
             const doc = parser.parseFromString(article.content, "text/html")
 
@@ -28,6 +29,7 @@ window.onload = async () => {
 
 
             articleDiv.innerHTML = `
+                <h6>문서번호: ${article.pk}</h6>
                 <h3>${article.title}</h3>
                 <h3>수정시간: ${article_update_at}</h3>
                 <h3>작성자: ${article.user}</h3> 
@@ -50,7 +52,7 @@ window.onload = async () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer <tokken>'
+                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg0MDk1OTg1LCJpYXQiOjE2ODQwNjU5ODUsImp0aSI6ImE0MjJmMDM1NmJjNzQxOTg4YzA3YjQyZjE2NDk4NGI5IiwidXNlcl9pZCI6NCwiZW1haWwiOiJ0ZXN0QGRhdW0uY29tIn0.eG6S-SaNj_9A_Mg62PFhLbg8phDN6I0bUTQOzc7c4pM'
                 },
             });
 
@@ -73,7 +75,7 @@ window.onload = async () => {
             console.error('좋아요 요청 중 오류가 발생하였습니다:', error);
         }
     }
-    // 이벤트 리스너 추가
+    // 좋아요 버튼 클릭 이벤트 추가
     const likeButtons = document.querySelectorAll('.like-button');
     likeButtons.forEach((button) => {
         button.addEventListener('click', () => {
@@ -81,6 +83,12 @@ window.onload = async () => {
             likeArticle(articleId);
         });
     });
-    // 이하 생략
-
-};
+    // 이벤트 리스너 추가
+    const articles = document.querySelectorAll('.article');
+    articles.forEach((article) => {
+        const articleId = article.querySelector('h6').textContent.split(':')[1].trim();
+        article.addEventListener('click', () => {
+            window.location.href = `articles_detail.html?id=${articleId}`;
+        });
+    });
+}
