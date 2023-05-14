@@ -1,0 +1,59 @@
+{%  extends 'home.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+{% endblock css %}
+{% block title %}
+    회원가입
+{% endblock %}
+{% block content %}
+
+    <div class="col-md-7">
+        <div class="row mb-2">
+            <div class="col-md-12">
+                <div class="card" style="background-color: #c4f7d1; ">
+                    <div class="card-body">
+                        <div class="media">
+                            <div class="media-body">
+                                <div class="container">
+                                    <div class="wrap">
+                                        <h2 class="title-center">
+                                            회원가입
+                                        </h2>
+                                        <form class="form-area" method="post" action="/users/signup/"
+                                              enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            Name :
+                                            {{ form.username }}
+                                            <br>
+                                            Email :
+                                            {{ form.email }}
+                                            <br>
+                                            Bio :
+                                            {{ form.bio }}
+                                            <br>
+                                            Password :
+                                            {{ form.password }}
+                                            <br>
+                                            Password2 :
+                                            <input name="password2" class="form-control" type="password"
+                                                   placeholder="Password_check" style="font-family: sans-serif">
+                                            <hr>
+
+                                            <div style="float: right">
+                                                <a href="/signin" class="btn btn-default">로그인 페이지로</a>
+                                                <button type="submit" class="btn btn-primary">회원가입</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+    </div>
+
+{% endblock %}

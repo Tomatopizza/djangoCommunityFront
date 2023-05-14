@@ -1,0 +1,46 @@
+{% extends 'user/../home.html' %}
+
+{% block title %}
+    로그인
+{% endblock %}
+{% block content %}
+    <!-- 오른 쪽 컬럼-->
+    <div class="col-md-7">
+        <div class="row mb-2">
+            <div class="col-md-12">
+                <div class="card" style="background-color: #FDF5E6;
+             border-radius: 100px 100px 20px 20px">
+                    <div class="card-body">
+                        <div class="media">
+                            <div class="media-body">
+                                <div class="container">
+                                    <div class="wrap">
+                                        <h2 class="title-center">
+                                            로그인</h2>
+                                        <form class="form-area" action="/sign-in/" method="post">
+                                            {% csrf_token %}
+                                            <div>
+                                                <label>사용자 이름</label>
+                                                <input type="text" class="form-control" id="username" name="username">
+                                            </div>
+                                            <div style="margin-bottom: 30px">
+                                                <label>비밀번호</label>
+                                                <input type="password" class="form-control" id="password"
+                                                       name="password" style="font-family: sans-serif">
+                                            </div>
+                                            <a href="/sign-up" style="text-decoration: none">회원가입이 필요하십니까?</a>
+                                            <div style="float: right; margin-bottom: 30px">
+                                                <button type="submit" class="btn btn-primary">로그인</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+    </div>
+{% endblock %}
