@@ -1,3 +1,5 @@
+const token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg0MTI2MTIwLCJpYXQiOjE2ODQwOTYxMjAsImp0aSI6IjdjZDA3NDM3YTk4NzQwMTdiOGE4MzBmZDlhZmY4NjA3IiwidXNlcl9pZCI6NCwiZW1haWwiOiJ0ZXN0QGRhdW0uY29tIn0.dM6hyI_kVZamWCH_fSUwhvuFZB-dym5XKAD9ZMReBUU"
+
 window.onload = async () => {
     const articleListDiv = document.getElementById("article_list");
 
@@ -41,7 +43,7 @@ window.onload = async () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg0MTI2MTIwLCJpYXQiOjE2ODQwOTYxMjAsImp0aSI6IjdjZDA3NDM3YTk4NzQwMTdiOGE4MzBmZDlhZmY4NjA3IiwidXNlcl9pZCI6NCwiZW1haWwiOiJ0ZXN0QGRhdW0uY29tIn0.dM6hyI_kVZamWCH_fSUwhvuFZB-dym5XKAD9ZMReBUU'
+                    'Authorization': `${token}`
                 },
             });
 

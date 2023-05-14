@@ -1,4 +1,5 @@
 const proxy = "http://127.0.0.1:8000";
+const token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg0MTI2MTIwLCJpYXQiOjE2ODQwOTYxMjAsImp0aSI6IjdjZDA3NDM3YTk4NzQwMTdiOGE4MzBmZDlhZmY4NjA3IiwidXNlcl9pZCI6NCwiZW1haWwiOiJ0ZXN0QGRhdW0uY29tIn0.dM6hyI_kVZamWCH_fSUwhvuFZB-dym5XKAD9ZMReBUU"
 
 async function getArticleDetail(articleId) {
     try {
@@ -28,7 +29,7 @@ async function createComment(articleId, commentData) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg0MTI2MTIwLCJpYXQiOjE2ODQwOTYxMjAsImp0aSI6IjdjZDA3NDM3YTk4NzQwMTdiOGE4MzBmZDlhZmY4NjA3IiwidXNlcl9pZCI6NCwiZW1haWwiOiJ0ZXN0QGRhdW0uY29tIn0.dM6hyI_kVZamWCH_fSUwhvuFZB-dym5XKAD9ZMReBUU'
+                'Authorization': `${token}`
             },
             body: JSON.stringify(commentData)
         });
@@ -46,7 +47,7 @@ async function updateComment(articleId, commentId, commentData) {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg0MTI2MTIwLCJpYXQiOjE2ODQwOTYxMjAsImp0aSI6IjdjZDA3NDM3YTk4NzQwMTdiOGE4MzBmZDlhZmY4NjA3IiwidXNlcl9pZCI6NCwiZW1haWwiOiJ0ZXN0QGRhdW0uY29tIn0.dM6hyI_kVZamWCH_fSUwhvuFZB-dym5XKAD9ZMReBUU'
+                'Authorization': `${token}`
             },
             body: JSON.stringify(commentData)
         });
@@ -67,7 +68,7 @@ async function deleteComment(articleId, commentId) {
         const response = await fetch(`${proxy}/articles/${articleId}/comment/${commentId}/`, {
             method: 'DELETE',
             headers: {
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg0MTI2MTIwLCJpYXQiOjE2ODQwOTYxMjAsImp0aSI6IjdjZDA3NDM3YTk4NzQwMTdiOGE4MzBmZDlhZmY4NjA3IiwidXNlcl9pZCI6NCwiZW1haWwiOiJ0ZXN0QGRhdW0uY29tIn0.dM6hyI_kVZamWCH_fSUwhvuFZB-dym5XKAD9ZMReBUU'
+                'Authorization': `${token}`
             }
         });
         if (response.status === 204) {
@@ -174,6 +175,12 @@ window.addEventListener('DOMContentLoaded', async () => {
                 commentContent.innerHTML = `<strong>${comment.user}</strong>: ${editedContent}`;
                 window.location.reload();
             });
+        });
+        //삭제 버튼 클릭 시 댓글 삭제
+        const deleteButton = commentItem.querySelector('.delete-button');
+        deleteButton.addEventListener('click', async () => {
+            const commentId = comment.id;
+            await deleteComment(articleId, commentId);
         });
     });
 
