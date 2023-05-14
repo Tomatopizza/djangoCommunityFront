@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>게시글 작성</title>
+    <script src="https://cdn.ckeditor.com/ckeditor5/29.0.0/classic/ckeditor.js"></script>
+</head>
+
+<body>
+    <h1>게시글 작성</h1>
+
+    <form id="articleForm">
+        <div>
+            <label for="title">제목:</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div>
+            <label for="image">이미지:</label>
+            <input type="file" id="image" name="image">
+        </div>
+        <div>
+            <label for="content">내용:</label>
+            <div id="editor">
+
+            </div>
+        </div>
+        <button id="save-button">작성</button>
+    </form>
+
+    <script>
+        let editorInstance;
+
+        ClassicEditor
+            .create(document.querySelector('#editor'))
+            .then(editor => {
+                console.log(editor)
+                editorInstance = editor;
+
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+        document.getElementById('save-button').addEventListener('click', function () {
+            const editorData = editorInstance.getData();
+            console.log(editorData)
+            createArticle(editorData)
+        })
+
+        async function createArticle(editorData) {
+            // 게시글 작성 폼에서 입력된 데이터 수집
+            const title = document.getElementById('title').value;
+            // const content = document.getElementById('content').innerHTML;
+            const content = editorData;
+            const image = document.getElementById('image').files[0];
+
+
+            // FormData 객체 생성 및 데이터 추가
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('content', content);
+            formData.append('image', image);
+
+            console.log(formData);
+
+            try {
+                // POST 요청 보내기
+                const response = await fetch('http://127.0.0.1:8000/articles/', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Authorization': 'Bearer <tokken>'
+                    },
+                });
+
+                // 응답 처리
+                if (response.ok) {
+                    const article = await response.json();
+                    console.log('게시글이 작성되었습니다:', article);
+                    // 게시글 작성 성공 시, 필요한 처리 작업 수행
+                } else {
+                    console.error('게시글 작성에 실패했습니다:', response.statusText);
+                    // 게시글 작성 실패 시, 필요한 처리 작업 수행
+                }
+            } catch (error) {
+                console.error('게시글 작성 중 오류가 발생했습니다:', error);
+                // 오류 처리 작업 수행
+            }
+        }
+    </script>
+</body>
+
+</html>
