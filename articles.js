@@ -13,28 +13,17 @@ window.onload = async () => {
         articles.forEach((article) => {
             const articleDiv = document.createElement("div");
             articleDiv.classList.add("article"); // 클래스명 추가
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(article.content, "text/html")
 
-            doc.querySelectorAll('img').forEach(img => {
-                let imgSrc = img.getAttribute('src');
-                if (imgSrc.startsWith('/')) {
-                    img.setAttribute('src', proxy + imgSrc);
-                }
-            });
-
-            const bodyContent = doc.body.innerHTML
             const article_update_at = new Date(article.updated_at).toLocaleString();
             const image_url = proxy + article.image
 
 
             articleDiv.innerHTML = `
                 <h6>문서번호: ${article.pk}</h6>
-                <h3>${article.title}</h3>
-                <h3>수정시간: ${article_update_at}</h3>
+                <h5>수정시간: ${article_update_at}</h5>
+                <h1>${article.title}</h1>
                 <h3>작성자: ${article.user}</h3> 
-                <img src=${image_url} alt="썸네일" width="50" height="50">
-                ${bodyContent}
+                <img src=${image_url} alt="썸네일" width="150" height="150">
                 <h3>댓글:${article.comments_count}개</h3>
                 <button class="like-button" article_id=${article.pk}>♡ ${article.likes_count}</button>
             `;
