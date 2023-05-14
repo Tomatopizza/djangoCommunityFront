@@ -1,0 +1,105 @@
+{% extends 'user/../home.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/bookmark.css' %}">
+{% endblock css %}
+{% block title %}
+    북마크 목록
+{% endblock %}
+
+{% block content %}
+    <!-- 오른 쪽 컬럼-->
+    <div class="col-md-7">
+        <!-- 글을 작성 하는 곳 -->
+        <div class="row mb-2">
+            <div class="col-md-12">
+                <div class="card" style="background-color: #ffe0b2;
+                border-radius: 100px 100px 20px 20px; border: #B86824 solid 3px">
+                    <div class="card-body">
+                        <div class="media">
+                            <div class="media-body">
+                                <div style="text-align: center; margin-bottom: 30px">
+                                    <div style="display: inline-block">
+                                        <h5 style="font-size: 30px;"> 북마크 </h5>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="display: inline-block; float: left;
+                                    position: relative;bottom: 20px;">
+                                        <img src="{% static "img/image.png" %}" style="width: 100px; height: 100px">
+                                    </div>
+                                </div>
+                                <table id="table" class="table" style="text-align: center; width: 100%">
+                                    <thead>
+                                    <tr class="table_bar">
+                                        <th>카테고리</th>
+                                        <th>제목</th>
+                                        <th>작성자</th>
+                                        <th>썸네일</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for bo in page_obj %}
+                                        <tr style="vertical-align: middle; background-color: #FDF5E6">
+                                            <th>{{ bo.posting.posting_category }}</th>
+                                            <th><a href="/detail-posting/{{ bo.posting.id }}"
+                                                   style="text-decoration: none">
+                                                {{ bo.posting.posting_title }}</a></th>
+                                            <th>{{ bo.posting.posting_author.username }}</th>
+                                            <th>{{ bo.posting.posting_views }}</th>
+                                            <th style="text-align: center">
+                                                <div style="width: 50px;height: 50px;border-radius: 100%;
+                                            overflow-y: auto; display: inline-block">
+                                                    {% if bo.posting.posting_img %}
+                                                        <a href="/detail-posting/{{ bo.posting.id }}"
+                                                           style="text-decoration: none">
+                                                        <img
+                                                             src="{{ bo.posting.posting_img.url }}" width="100%"
+                                                             height="100%" style="object-fit: cover;">
+                                                        </a>
+                                                    {% else %}
+                                                        <a href="/detail-posting/{{ bo.posting.id }}"
+                                                           style="text-decoration: none">
+                                                            <img class="image-thumbnail"
+                                                                 src="{% static "img/image.png" %}" width="100%"
+                                                                 height="100%">
+                                                        </a>
+                                                    {% endif %}
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% if page_obj.has_other_pages %}
+                                    <div style="text-align: center">
+                                        <li style="margin: 3px; list-style: none;">
+                                            {% if page_obj.has_previous %}
+                                                <a href="?page={{ page_obj.previous_page_number }}"
+                                                   style="text-decoration: none;">&#10094; 이전</a>
+                                            {% endif %}
+                                            {% for page in custom_range %}
+                                                {% if page == page_obj.number %}
+                                                    <a href="?page={{ page }}"
+                                                       style="text-decoration: none;color: red;">{{ page }}</a>
+                                                {% else %}
+                                                    <a href="?page={{ page }}"
+                                                       style="text-decoration: none;">{{ page }}</a>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if page_obj.has_next %}
+                                                <a href="?page={{ page_obj.next_page_number }}"
+                                                   style="text-decoration: none;">&#10095; 다음</a>
+                                            {% endif %}
+                                        </li>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+    </div>
+{% endblock %}
