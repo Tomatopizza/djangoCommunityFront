@@ -39,7 +39,7 @@
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #7BAB8D">
     <div class="container">
         <div>
-            {#            <img src="{% static "img/image.png" %}" style="width: 100px; height: 100px">#}
+{#                        <img src="{% static "static/img/image.png" %}" style="width: 100px; height: 100px">#}
             <a class="navbar-brand" href="/users/">Awe3ome Review</a>
             {#            <a class="nav-link" href="/">#}
             {#                home#}
@@ -57,7 +57,7 @@
                     <span class="sr-only"></span></a>
 
             {% endif %}
-            {#            <img src="{% static "img/image.png" %}" style="width: 100px; height: 50px">#}
+
         </div>
         <form class="form-inline my-2 my-lg-0">
             {% if not user.is_authenticated %}
@@ -96,11 +96,11 @@
                     {% if user.is_authenticated %}
                         <div style="width: 100px; height: 100px; display: inline-block;
                              border-radius: 100px; overflow-y: auto;">
-                            {% if user.imgUrl %}
-                                <img class="profile-thumbnail" src="{{ user.imgUrl.url }}" width="100%" height="100%">
-                            {% else %}
-                                <img src="{% static "img/image.png" %}" width="100%" height="100%">
-                            {% endif %}
+{#                            {% if user.imgUrl %}#}
+{#                                <img class="profile-thumbnail" src="{{ user.imgUrl.url }}" width="100%" height="100%">#}
+{#                            {% else %}#}
+{#                                <img src="{% static "static/img/image.png" %}" width="100%" height="100%">#}
+{#                            {% endif %}#}
                         </div>
                         <br>
                         <h7 class="card-title">{{ user.username }}님</h7>
@@ -113,9 +113,9 @@
                     {% endif %}
                 </div>
             </div>
-            {#            <div style="border-radius: 10px; overflow-y: auto; margin-top: 20px; border: #B86824 solid 3px">#}
-            {#                <img src="{% static "img/image.jpg" %}" width="100%" height="100%">#}
-            {#            </div>#}
+{#                        <div style="border-radius: 10px; overflow-y: auto; margin-top: 20px; border: #B86824 solid 3px">#}
+{#                            <img src="{% static "static/img/image.png" %}" style="width: 100px; height: 100px">#}
+{#                        </div>#}
         </div>
         {% block content %}{% endblock %}
     </div>
