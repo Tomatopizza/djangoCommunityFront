@@ -15,6 +15,7 @@ window.onload = async () => {
         articles.forEach((article) => {
             const articleDiv = document.createElement("div");
             articleDiv.classList.add("article"); // 클래스명 추가
+            const likeDiv = document.createElement("div");
 
             const article_update_at = new Date(article.updated_at).toLocaleString();
             const image_url = proxy + article.image
@@ -27,11 +28,13 @@ window.onload = async () => {
                 <h3>작성자: ${article.user}</h3> 
                 <img src=${image_url} alt="썸네일" width="150" height="150">
                 <h3>댓글:${article.comments_count}개</h3>
-                <button class="like-button" article_id=${article.pk}>♡ ${article.likes_count}</button>
             `;
+            likeDiv.innerHTML = `<button class="like-button" article_id=${article.pk}>♡ ${article.likes_count}</button>`;
 
             articleListDiv.appendChild(articleDiv);
+            articleListDiv.appendChild(likeDiv);
             articleDiv.style.backgroundColor = "lightgray";
+            likeDiv.style.backgroundColor = "lightblue";
         });
     } catch (error) {
         console.error('게시글을 가져오는 중 오류가 발생했습니다:', error);

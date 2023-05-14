@@ -28,6 +28,7 @@
     </form>
 
     <script>
+        const token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg0MTI2MTIwLCJpYXQiOjE2ODQwOTYxMjAsImp0aSI6IjdjZDA3NDM3YTk4NzQwMTdiOGE4MzBmZDlhZmY4NjA3IiwidXNlcl9pZCI6NCwiZW1haWwiOiJ0ZXN0QGRhdW0uY29tIn0.dM6hyI_kVZamWCH_fSUwhvuFZB-dym5XKAD9ZMReBUU"
         let editorInstance;
 
         ClassicEditor
@@ -69,7 +70,7 @@
                     method: 'POST',
                     body: formData,
                     headers: {
-                        'Authorization': 'Bearer <tokken>'
+                        'Authorization': `${token}`
                     },
                 });
 
@@ -77,6 +78,8 @@
                 if (response.ok) {
                     const article = await response.json();
                     console.log('게시글이 작성되었습니다:', article);
+                    // 글 작성 후 메인페이지 이동 코드인데 작동이 안됩니다.
+                    // window.location.href = "http://localhost:5500/articles.html";
                     // 게시글 작성 성공 시, 필요한 처리 작업 수행
                 } else {
                     console.error('게시글 작성에 실패했습니다:', response.statusText);

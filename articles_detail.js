@@ -88,11 +88,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const articleId = urlParams.get('id');
 
-
-
     const article = await getArticleDetail(articleId); // 비동기 함수 실행을 기다림
-    console.log(article)
-
     const parser = new DOMParser();
     const doc = parser.parseFromString(article.content, "text/html");
 
@@ -133,7 +129,6 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     // 댓글 가져오기
     const comments = await getComments(articleId);
-    console.log(comments);
 
     // 댓글을 표시하는 코드 작성
     const commentsList = document.createElement('div');
@@ -146,7 +141,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     `;
         commentsList.appendChild(commentItem);
 
-        // 수정 버튼 클릭 시 댓글 내용을 편집 가능한 입력 상자에 표시
+        // 수정 버튼 클릭 시 입력상자 출현 및 원래 내용 기입
         const editButton = commentItem.querySelector('.edit-button');
         editButton.addEventListener('click', () => {
             const commentContent = commentItem.querySelector('p');
@@ -166,12 +161,10 @@ window.addEventListener('DOMContentLoaded', async () => {
                     content: editedContent,
                     // 필요한 댓글 데이터 추가
                 };
-
+                // 밑에 코드 없으면 안됩니다
                 const updatedComment = await updateComment(articleId, commentId, commentData);
-                console.log(updatedComment);
-                // 필요한 작업 수행 (예: 화면 갱신 등)
 
-                // 수정된 댓글 내용을 화면에 반영하는 코드 작성
+                // 수정된 댓글 반영 후 새로고침
                 commentContent.innerHTML = `<strong>${comment.user}</strong>: ${editedContent}`;
                 window.location.reload();
             });
@@ -195,9 +188,7 @@ window.addEventListener('DOMContentLoaded', async () => {
             content: commentContent,
             // 필요한 댓글 데이터 추가
         };
-        console.log(commentData)
         const newComment = await createComment(articleId, commentData);
-        console.log(newComment);
 
         // 댓글 작성 후 새로고침
         window.location.reload();
