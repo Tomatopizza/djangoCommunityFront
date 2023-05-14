@@ -28,7 +28,7 @@ async function createComment(articleId, commentData) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg0MDk1OTg1LCJpYXQiOjE2ODQwNjU5ODUsImp0aSI6ImE0MjJmMDM1NmJjNzQxOTg4YzA3YjQyZjE2NDk4NGI5IiwidXNlcl9pZCI6NCwiZW1haWwiOiJ0ZXN0QGRhdW0uY29tIn0.eG6S-SaNj_9A_Mg62PFhLbg8phDN6I0bUTQOzc7c4pM'
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg0MTI2MTIwLCJpYXQiOjE2ODQwOTYxMjAsImp0aSI6IjdjZDA3NDM3YTk4NzQwMTdiOGE4MzBmZDlhZmY4NjA3IiwidXNlcl9pZCI6NCwiZW1haWwiOiJ0ZXN0QGRhdW0uY29tIn0.dM6hyI_kVZamWCH_fSUwhvuFZB-dym5XKAD9ZMReBUU'
             },
             body: JSON.stringify(commentData)
         });
@@ -39,10 +39,54 @@ async function createComment(articleId, commentData) {
     }
 }
 
+// 댓글 수정
+async function updateComment(articleId, commentId, commentData) {
+    try {
+        const response = await fetch(`${proxy}/articles/${articleId}/comment/${commentId}/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg0MTI2MTIwLCJpYXQiOjE2ODQwOTYxMjAsImp0aSI6IjdjZDA3NDM3YTk4NzQwMTdiOGE4MzBmZDlhZmY4NjA3IiwidXNlcl9pZCI6NCwiZW1haWwiOiJ0ZXN0QGRhdW0uY29tIn0.dM6hyI_kVZamWCH_fSUwhvuFZB-dym5XKAD9ZMReBUU'
+            },
+            body: JSON.stringify(commentData)
+        });
+        if (response.status === 200) {
+            const updatedComment = await response.json();
+            return updatedComment;
+        } else {
+            throw new Error('댓글 수정 중 오류가 발생했습니다');
+        }
+    } catch (error) {
+        console.error('댓글 수정 중 오류가 발생했습니다:', error);
+    }
+}
+
+// 댓글 삭제
+async function deleteComment(articleId, commentId) {
+    try {
+        const response = await fetch(`${proxy}/articles/${articleId}/comment/${commentId}/`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg0MTI2MTIwLCJpYXQiOjE2ODQwOTYxMjAsImp0aSI6IjdjZDA3NDM3YTk4NzQwMTdiOGE4MzBmZDlhZmY4NjA3IiwidXNlcl9pZCI6NCwiZW1haWwiOiJ0ZXN0QGRhdW0uY29tIn0.dM6hyI_kVZamWCH_fSUwhvuFZB-dym5XKAD9ZMReBUU'
+            }
+        });
+        if (response.status === 204) {
+            window.location.reload();
+        } else if (response.status === 403) {
+            throw new Error('권한이 없습니다!');
+        } else {
+            throw new Error('댓글 삭제 중 오류가 발생했습니다');
+        }
+    } catch (error) {
+        console.error('댓글 삭제 중 오류가 발생했습니다:', error);
+    }
+}
+
 // 페이지 로드 시 실행되는 코드
 window.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const articleId = urlParams.get('id');
+
 
 
     const article = await getArticleDetail(articleId); // 비동기 함수 실행을 기다림
@@ -93,11 +137,44 @@ window.addEventListener('DOMContentLoaded', async () => {
     // 댓글을 표시하는 코드 작성
     const commentsList = document.createElement('div');
     comments.forEach(comment => {
-        const commentItem = document.createElement('li');
+        const commentItem = document.createElement('span');
         commentItem.innerHTML = `
-        <strong>${comment.user}</strong>: ${comment.content}
+        <p id=comment_content>${comment.user} : ${comment.content}</p>
+        <button class="edit-button">수정</button>
+        <button class="delete-button">삭제</button>
     `;
         commentsList.appendChild(commentItem);
+
+        // 수정 버튼 클릭 시 댓글 내용을 편집 가능한 입력 상자에 표시
+        const editButton = commentItem.querySelector('.edit-button');
+        editButton.addEventListener('click', () => {
+            const commentContent = commentItem.querySelector('p');
+            console.log(commentItem)
+            console.log(commentContent)
+            const currentContent = commentContent.textContent.split(' : ')[1];
+            commentContent.innerHTML = `
+            <textarea class="edit_comment_input">${currentContent}</textarea>
+            <button class="save_button">저장</button>
+        `;
+            const saveButton = commentItem.querySelector('.save_button');
+            saveButton.addEventListener('click', async () => {
+                const editedContent = commentItem.querySelector('.edit_comment_input').value;
+                const commentId = comment.id;
+
+                const commentData = {
+                    content: editedContent,
+                    // 필요한 댓글 데이터 추가
+                };
+
+                const updatedComment = await updateComment(articleId, commentId, commentData);
+                console.log(updatedComment);
+                // 필요한 작업 수행 (예: 화면 갱신 등)
+
+                // 수정된 댓글 내용을 화면에 반영하는 코드 작성
+                commentContent.innerHTML = `<strong>${comment.user}</strong>: ${editedContent}`;
+                window.location.reload();
+            });
+        });
     });
 
     commentsBox.appendChild(commentsList);
@@ -111,6 +188,7 @@ window.addEventListener('DOMContentLoaded', async () => {
             content: commentContent,
             // 필요한 댓글 데이터 추가
         };
+        console.log(commentData)
         const newComment = await createComment(articleId, commentData);
         console.log(newComment);
 
