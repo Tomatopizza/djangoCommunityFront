@@ -1,3 +1,5 @@
+const token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg0MTI2MTIwLCJpYXQiOjE2ODQwOTYxMjAsImp0aSI6IjdjZDA3NDM3YTk4NzQwMTdiOGE4MzBmZDlhZmY4NjA3IiwidXNlcl9pZCI6NCwiZW1haWwiOiJ0ZXN0QGRhdW0uY29tIn0.dM6hyI_kVZamWCH_fSUwhvuFZB-dym5XKAD9ZMReBUU"
+
 window.onload = async () => {
     const articleListDiv = document.getElementById("article_list");
 
@@ -12,33 +14,27 @@ window.onload = async () => {
         // 가져온 게시글을 표시
         articles.forEach((article) => {
             const articleDiv = document.createElement("div");
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(article.content, "text/html")
+            articleDiv.classList.add("article"); // 클래스명 추가
+            const likeDiv = document.createElement("div");
 
-            doc.querySelectorAll('img').forEach(img => {
-                let imgSrc = img.getAttribute('src');
-                if (imgSrc.startsWith('/')) {
-                    img.setAttribute('src', proxy + imgSrc);
-                }
-            });
-
-            const bodyContent = doc.body.innerHTML
             const article_update_at = new Date(article.updated_at).toLocaleString();
             const image_url = proxy + article.image
 
 
             articleDiv.innerHTML = `
-                <h3>${article.title}</h3>
-                <h3>수정시간: ${article_update_at}</h3>
+                <h6>문서번호: ${article.pk}</h6>
+                <h5>수정시간: ${article_update_at}</h5>
+                <h1>${article.title}</h1>
                 <h3>작성자: ${article.user}</h3> 
-                <img src=${image_url} alt="썸네일" width="50" height="50">
-                ${bodyContent}
+                <img src=${image_url} alt="썸네일" width="150" height="150">
                 <h3>댓글:${article.comments_count}개</h3>
-                <button class="like-button" article_id=${article.pk}>♡ ${article.likes_count}</button>
             `;
+            likeDiv.innerHTML = `<button class="like-button" article_id=${article.pk}>♡ ${article.likes_count}</button>`;
 
             articleListDiv.appendChild(articleDiv);
+            articleListDiv.appendChild(likeDiv);
             articleDiv.style.backgroundColor = "lightgray";
+            likeDiv.style.backgroundColor = "lightblue";
         });
     } catch (error) {
         console.error('게시글을 가져오는 중 오류가 발생했습니다:', error);
@@ -50,7 +46,7 @@ window.onload = async () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer <tokken>'
+                    'Authorization': `${token}`
                 },
             });
 
@@ -73,7 +69,7 @@ window.onload = async () => {
             console.error('좋아요 요청 중 오류가 발생하였습니다:', error);
         }
     }
-    // 이벤트 리스너 추가
+    // 좋아요 버튼 클릭 이벤트 추가
     const likeButtons = document.querySelectorAll('.like-button');
     likeButtons.forEach((button) => {
         button.addEventListener('click', () => {
@@ -81,6 +77,12 @@ window.onload = async () => {
             likeArticle(articleId);
         });
     });
-    // 이하 생략
-
-};
+    // 이벤트 리스너 추가
+    const articles = document.querySelectorAll('.article');
+    articles.forEach((article) => {
+        const articleId = article.querySelector('h6').textContent.split(':')[1].trim();
+        article.addEventListener('click', () => {
+            window.location.href = `articles_detail.html?id=${articleId}`;
+        });
+    });
+}
