@@ -3,12 +3,12 @@
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/articles.css' %}">
 {% endblock css %}
-<script src="https://cdn.ckeditor.com/ckeditor5/29.0.0/classic/ckeditor.js"></script>
+
 {% block title %}
     게시글 작성
 {% endblock %}
 {% block content %}
-
+<script src={% static 'https://cdn.ckeditor.com/ckeditor5/29.0.0/classic/ckeditor.js' %}></script>
     <div class="col-md-7">
         <div class="row mb-2">
             <div class="col-md-12">
@@ -22,19 +22,22 @@
                                             게시글 작성
                                         </h2>
                                         <form id="articleForm">
-                                            <div>
+                                            <div id="title">
                                                 <label for="title">제목:</label>
-                                                <input type="text" id="title" name="title" required>
+{#                                                <input type="text" id="title" name="title" required>#}
+                                                {{ article_form.title }}
                                             </div>
-                                            <div>
+                                            <div id="image">
                                                 <label for="image">이미지:</label>
-                                                <input type="file" id="image" name="image">
+{#                                                <input type="file" id="image" name="image">#}
+                                                {{ article_form.image }}
                                             </div>
-                                            <div>
+                                            <div id="editor">
                                                 <label for="content">내용:</label>
-                                                <div id="editor">
-
-                                                </div>
+{#                                                <div id="editor">#}
+{#                                                    #}
+{#                                                </div>#}
+                                                {{ article_form.content }}
                                             </div>
                                             <button id="save-button">작성</button>
                                         </form>

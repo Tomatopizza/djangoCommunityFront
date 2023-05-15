@@ -1,8 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block css %}
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-{% endblock css %}
 {% block title %}
     Awe3ome Review
 {% endblock %}
@@ -42,7 +39,6 @@
                             <table id="table" class="table">
                                 <thead>
                                 <tr class="table_bar">
-                                    <th>카테고리</th>
                                     <th>제목</th>
                                     <th>썸네일</th>
                                 </tr>
@@ -50,7 +46,6 @@
                                 <tbody>
                                 {% for po in page_obj %}
                                     <tr style="vertical-align: middle; background-color: #FDF5E6">
-                                        <th>{{ po.posting_category }}</th>
                                         <th>
                                             <a href="/detail-posting/{{ po.id }}" style="text-decoration: none">
                                                 {{ po.posting_title|truncatechars:10 }}</a>
@@ -66,7 +61,7 @@
                                                     </a>
                                                 {% else %}
                                                     <a href="/detail-posting/{{ po.id }}">
-                                                        <img src="{% static 'img/iamge.png' %}" width="100%"
+                                                        <img src="{% static 'static/img/image.png' %}" width="100%"
                                                              height="100%">
                                                     </a>
                                                 {% endif %}
